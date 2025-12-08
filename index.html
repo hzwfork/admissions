@@ -3,41 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- SEO 設定 -->
-<meta name="description" content="東吳大學招生專區，提供學士班、碩博士班及境外招生等最新入學資訊。">
+<!-- SEO Configuration -->
+<meta name="description" content="東吳大學招生專區提供最新入學資訊，涵蓋學士班（特殊選才、繁星推薦、申請入學、轉學考、運動績優）、碩博士班（甄試、考試、在職專班）及境外招生（外國學生、僑港澳生）等多元管道，歡迎加入東吳。">
 <meta property="og:title" content="東吳大學招生專區">
-<meta property="og:description" content="提供學士班、碩博士班及境外招生等最新入學資訊。">
+<meta property="og:description" content="東吳大學招生專區：學士班、碩博士班及境外招生一站式資訊入口。包含特殊選才、申請入學、轉學考、碩博考試及僑外生入學等完整簡章與報名資訊。">
 <meta property="og:image" content="https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg">
 
-<!-- 網站圖示 (Favicon) -->
+<!-- Favicon -->
 <link rel="icon" href="https://www.scu.edu.tw/entrance/anounce/Introscu/SCULOGO.png" type="image/png">
 <link rel="shortcut icon" href="https://www.scu.edu.tw/entrance/anounce/Introscu/SCULOGO.png" type="image/png">
 
-<!-- 外部資源：Font Awesome 圖示庫 -->
+<!-- External Resources -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- 外部資源：Google Fonts (Noto Sans TC) -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <title>東吳大學招生專區</title>
 
 <!-- 
   ==========================================
-  【網站管理員設定區】
-  請在此處修改圖片、連結與招生狀態
+  Global Configuration
   ==========================================
 -->
 <script>
-  // 1. 頂部橫幅圖片路徑
+  // Banner Image URL
   const CONFIG_BANNER_IMG = 'https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg';
 
-  // 2. 橫幅圖片對齊位置 (選項: 'center', 'top', 'bottom')
+  // Banner Position ('center', 'top', 'bottom')
   const CONFIG_BANNER_POS = 'bottom'; 
 
-  // 3. 各管道招生狀態開關 
-  // 'Y' = 顯示紅色「招生中」標籤
-  // 'N' = 一般顯示，隱藏標籤
+  // Admission Status Configuration
+  // 'Y': Active (Show "Recruiting" tag)
+  // 'N': Inactive
   const CONFIG_ADMISSION_STATUS = {
-    // === 學士班 ===
+    // === Bachelor ===
     "大學特殊選才": 'Y',
     "大學申請入學": 'N',
     "大學繁星推薦": 'N',
@@ -46,13 +44,13 @@
     "四技二專入學": 'N',
     "運動績優單獨招生": 'N',
     
-    // === 碩博士班 ===
+    // === Master & PhD ===
     "碩士班甄試": 'N',
     "碩士班考試": 'Y',
     "碩士在職專班": 'Y',
     "博士班": 'N',
     
-    // === 境外招生 ===
+    // === International ===
     "外國學生申請入學": 'Y',
     "新型專班": 'N',
     "僑生暨港澳生": 'N'
@@ -61,19 +59,19 @@
 
 <style>
   /* ==========================================
-     網站樣式表 (CSS)
+     CSS Stylesheet
      ========================================== */
   
   :root {
-    --scu-red: #d93025;      /* 東吳紅 */
-    --scu-black: #1a1a1a;    /* 文字黑 */
-    --scu-blue: #004d7a;     /* 連結藍 */
-    --bg-light: #f8f9fa;     /* 背景灰 */
+    --scu-red: #d93025;
+    --scu-black: #1a1a1a;
+    --scu-blue: #004d7a;
+    --bg-light: #f8f9fa;
     --white: #ffffff;
     --navbar-height: 60px;
   }
 
-  /* --- 全域設定 --- */
+  /* --- Global --- */
   * { box-sizing: border-box; }
   body, html { 
     margin: 0; 
@@ -86,7 +84,7 @@
     min-height: 100vh; 
   }
 
-  /* --- 導覽列 (Navbar) --- */
+  /* --- Navbar --- */
   .navbar {
     position: sticky;
     top: 0;
@@ -139,7 +137,7 @@
     background-color: #fce8e6;
   }
 
-  /* 手機版選單按鈕 */
+  /* Mobile Hamburger */
   .hamburger {
     display: none;
     cursor: pointer;
@@ -147,7 +145,7 @@
     color: #333;
   }
 
-  /* --- 橫幅區 (Header Banner) --- */
+  /* --- Header Banner --- */
   .page-header {
     width: 100%; 
     height: 280px;
@@ -162,7 +160,7 @@
     position: relative;
   }
   
-  /* 遮罩效果 */
+  /* Overlay */
   .page-header::before {
     content: '';
     position: absolute;
@@ -190,7 +188,7 @@
     color: #f0f0f0;
   }
 
-  /* --- 主內容區塊 --- */
+  /* --- Main Container --- */
   .main-container {
     max-width: 1200px; 
     margin: 0 auto; 
@@ -203,11 +201,11 @@
     width: 100%;
   }
 
-  /* 左側：影片區 */
+  /* Video Section */
   .video-section { flex: 3; min-width: 300px; }
   .video-wrapper {
     position: relative; 
-    padding-bottom: 56.25%; /* 16:9 比例 */
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
     height: 0; 
     background: #000; 
     border-radius: 12px; 
@@ -228,7 +226,7 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
 
-  /* 右側：選單區 */
+  /* Menu Section */
   .menu-section {
     flex: 2; 
     min-width: 300px; 
@@ -238,7 +236,7 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
   }
 
-  /* 切換按鈕 (顯示全部/招生中) */
+  /* Toggle Buttons */
   .toggle-wrapper { 
     display: flex; 
     justify-content: flex-start; 
@@ -267,7 +265,7 @@
   }
   .toggle-btn:hover { background-color: #f0f8ff; transform: translateY(-1px); }
 
-  /* 切換按鈕選中狀態 */
+  /* Toggle States */
   input#mode-all:checked ~ .menu-section .toggle-wrapper label[for="mode-all"],
   input#mode-recruiting:checked ~ .menu-section .toggle-wrapper label[for="mode-recruiting"] {
     background-color: var(--scu-blue); 
@@ -280,7 +278,7 @@
     box-shadow: 0 2px 5px rgba(217,48,37,0.3);
   }
 
-  /* 選單列表樣式 */
+  /* Menu List */
   .category-group { margin-bottom: 30px; }
   .category-group:last-child { margin-bottom: 0; }
 
@@ -326,7 +324,7 @@
   .arrow-icon { color: #ccc; font-size: 14px; transition: transform 0.2s; }
   a.menu-link:hover .arrow-icon { transform: translateX(3px); color: #8B4513; }
 
-  /* 熱門/招生中標籤樣式 */
+  /* Hot/Status Tag */
   .tag-hot {
     background-color: var(--scu-red); 
     color: white; 
@@ -345,7 +343,7 @@
     from { opacity: 0; } to { opacity: 1; }
   }
 
-  /* --- 頁尾 (Footer) --- */
+  /* --- Footer --- */
   .page-footer {
     width: 100%; 
     background-color: var(--scu-black); 
@@ -368,14 +366,14 @@
   .footer-link:hover { color: #fff; border-bottom: 1px solid #fff; }
   .copyright { margin-top: 30px; font-size: 13px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
 
-  /* --- 響應式設計 (Mobile) --- */
+  /* --- Responsive (Mobile) --- */
   @media (max-width: 768px) {
     .navbar { padding: 0 15px; }
     
     .hamburger { display: block; }
     
     .nav-menu {
-      display: none; /* 手機版預設隱藏選單 */
+      display: none;
       position: absolute;
       top: var(--navbar-height);
       left: 0;
@@ -409,7 +407,7 @@
 </head>
 <body>
 
-  <!-- 1. 導覽列 -->
+  <!-- 1. Navbar -->
   <nav class="navbar">
     <a href="#" class="nav-brand">
       <i class="fa-solid fa-graduation-cap"></i> 東吳大學招生專區
@@ -426,7 +424,7 @@
     </ul>
   </nav>
 
-  <!-- 2. 橫幅 Banner -->
+  <!-- 2. Header Banner -->
   <header class="page-header" id="main-header">
     <div class="header-content">
       <div class="header-title">東吳大學招生專區</div>
@@ -434,20 +432,20 @@
     </div>
   </header>
 
-  <!-- 隱藏的 Radio 按鈕 (用於純 CSS 或簡單 JS 狀態切換邏輯) -->
+  <!-- Hidden Radio Buttons (State Control) -->
   <input type="radio" name="view-mode" id="mode-recruiting" checked onchange="filterContent()">
   <input type="radio" name="view-mode" id="mode-all" onchange="filterContent()">
 
-  <!-- 3. 主要內容 -->
+  <!-- 3. Main Content -->
   <div class="main-container">
     
-    <!-- 左側：影片區 -->
+    <!-- Left: Video Section -->
     <div class="video-section">
       <div class="video-wrapper">
         <!-- 
-          YouTube 嵌入設定:
-          - 使用 youtube-nocookie.com 保護隱私
-          - referrerpolicy="strict-origin-when-cross-origin" 確保跨網域安全性
+          YouTube Embed:
+          - domain: youtube-nocookie.com (Privacy enhanced)
+          - referrerpolicy: strict-origin-when-cross-origin (Security)
         -->
         <iframe 
             width="800" 
@@ -466,9 +464,9 @@
       </div>
     </div>
 
-    <!-- 右側：招生連結選單 -->
+    <!-- Right: Admission Menu -->
     <div class="menu-section">
-      <!-- 切換按鈕 -->
+      <!-- Toggle Buttons -->
       <div class="toggle-wrapper">
         <label class="toggle-btn" for="mode-recruiting">
           <i class="fa-solid fa-fire"></i> 顯示招生中
@@ -478,7 +476,7 @@
         </label>
       </div>
 
-      <!-- 學士班 -->
+      <!-- Bachelor -->
       <div class="category-group">
         <h3 class="menu-title">學士班</h3>
         <ul class="menu-list">
@@ -492,7 +490,7 @@
         </ul>
       </div>
 
-      <!-- 碩博士班 -->
+      <!-- Master & PhD -->
       <div class="category-group">
         <h3 class="menu-title">碩博士班</h3>
         <ul class="menu-list">
@@ -503,7 +501,7 @@
         </ul>
       </div>
 
-      <!-- 境外招生 -->
+      <!-- International -->
       <div class="category-group">
         <h3 class="menu-title">境外招生</h3>
         <ul class="menu-list">
@@ -516,7 +514,7 @@
     </div>
   </div>
 
-  <!-- 4. 頁尾 -->
+  <!-- 4. Footer -->
   <footer class="page-footer">
     <div class="footer-title">東吳大學教務處招生組</div>
     <div class="footer-info">
@@ -531,30 +529,30 @@
   <script>
     /**
      * ==========================================
-     * 系統邏輯區 (除非要修改程式行為，否則請勿更動)
+     * Core Application Logic
      * ==========================================
      */
     function initPage() {
-      // 1. 初始化橫幅背景
+      // 1. Initialize Header Background
       const header = document.getElementById('main-header');
       if (CONFIG_BANNER_IMG) {
-        // 使用線性漸層覆蓋，確保文字清晰
+        // Overlay gradient for better text readability
         header.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${CONFIG_BANNER_IMG}')`;
         header.style.backgroundPosition = CONFIG_BANNER_POS;
       }
 
-      // 2. 初始化招生狀態與過濾器
+      // 2. Initialize Admission Status & Filters
       applyStatusConfig();
       filterContent();
     }
 
-    // 應用狀態設定：為符合條件的項目加上 status-active 樣式
+    // Apply active status styling based on configuration
     function applyStatusConfig() {
       const items = document.querySelectorAll('.menu-item');
       items.forEach(item => {
         const contentDiv = item.querySelector('.link-content');
         const fullName = contentDiv.innerText.trim();
-        // 移除 "招生中" 文字以取得純名稱，用於跟 Config 比對
+        // Remove "招生中" text to match config key
         const name = fullName.replace('招生中', '').trim();
         
         if (CONFIG_ADMISSION_STATUS[name] === 'Y') {
@@ -565,7 +563,7 @@
       });
     }
 
-    // 內容過濾邏輯：切換「全部」或「招生中」
+    // Filter Logic: Toggle between 'All' and 'Recruiting' modes
     function filterContent() {
       const isRecruitingMode = document.getElementById('mode-recruiting').checked;
       const allItems = document.querySelectorAll('.menu-item');
@@ -573,14 +571,14 @@
 
       allItems.forEach(item => {
         if (isRecruitingMode) {
-          // 在招生模式下，只顯示 class 有 status-active 的項目
+          // Show only items with 'status-active' class in recruiting mode
           item.style.display = item.classList.contains('status-active') ? 'block' : 'none';
         } else {
           item.style.display = 'block';
         }
       });
 
-      // 隱藏空群組 (如果該群組內所有項目都被隱藏，則隱藏標題)
+      // Hide empty groups if all items within are hidden
       allGroups.forEach(group => {
         const itemsInGroup = group.querySelectorAll('.menu-item');
         let hasVisible = false;
@@ -589,13 +587,13 @@
       });
     }
 
-    // 手機版選單切換開關
+    // Mobile Menu Toggle
     function toggleMenu() {
       const navMenu = document.getElementById('navMenu');
       navMenu.classList.toggle('active');
     }
 
-    // 執行頁面初始化
+    // Execute Initialization
     initPage();
   </script>
 </body>
