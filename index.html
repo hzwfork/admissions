@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- SEO Configuration -->
+
+<!-- 
+  ==========================================
+  SEO & Metadata Configuration
+  ==========================================
+-->
 <meta name="description" content="東吳大學招生專區提供最新入學資訊，涵蓋學士班（特殊選才、繁星推薦、申請入學、轉學考、運動績優）、碩博士班（甄試、考試、在職專班）及境外招生（外國學生、僑港澳生）等多元管道，歡迎加入東吳。">
 <meta property="og:title" content="東吳大學招生專區">
 <meta property="og:description" content="東吳大學招生專區：學士班、碩博士班及境外招生一站式資訊入口。包含特殊選才、申請入學、轉學考、碩博考試及僑外生入學等完整簡章與報名資訊。">
@@ -13,9 +18,15 @@
 <link rel="icon" href="https://www.scu.edu.tw/entrance/anounce/Introscu/SCULOGO.png" type="image/png">
 <link rel="shortcut icon" href="https://www.scu.edu.tw/entrance/anounce/Introscu/SCULOGO.png" type="image/png">
 
-<!-- External Resources -->
+<!-- 
+  ==========================================
+  External Resources
+  ==========================================
+-->
+<!-- FontAwesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<!-- Google Fonts: Noto Sans JP/TC for Japanese Aesthetic -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@500&display=swap" rel="stylesheet">
 
 <title>東吳大學招生專區</title>
 
@@ -25,17 +36,22 @@
   ==========================================
 -->
 <script>
-  // Banner Image URL
+  /**
+   * Banner Configuration
+   * @type {string} CONFIG_BANNER_IMG - The URL for the header background image.
+   * @type {string} CONFIG_BANNER_POS - CSS background-position property (e.g., 'center', 'bottom').
+   */
   const CONFIG_BANNER_IMG = 'https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg';
-
-  // Banner Position ('center', 'top', 'bottom')
   const CONFIG_BANNER_POS = 'bottom'; 
 
-  // Admission Status Configuration
-  // 'Y': Active (Show "Recruiting" tag)
-  // 'N': Inactive
+  /**
+   * Admission Status Configuration
+   * Controls the visibility of the "Recruiting" (招生中) tag.
+   * 'Y': Active (Show tag)
+   * 'N': Inactive (Hide tag)
+   */
   const CONFIG_ADMISSION_STATUS = {
-    // === Bachelor ===
+    // === Bachelor Degree ===
     "大學特殊選才": 'Y',
     "大學申請入學": 'N',
     "大學繁星推薦": 'N',
@@ -44,13 +60,13 @@
     "四技二專入學": 'N',
     "運動績優單獨招生": 'N',
     
-    // === Master & PhD ===
+    // === Master & PhD Degrees ===
     "碩士班甄試": 'N',
     "碩士班考試": 'Y',
     "碩士在職專班": 'Y',
     "博士班": 'N',
     
-    // === International ===
+    // === International Students ===
     "外國學生申請入學": 'Y',
     "新型專班": 'N',
     "僑生暨港澳生": 'N'
@@ -59,64 +75,80 @@
 
 <style>
   /* ==========================================
-     CSS Stylesheet
+     CSS Stylesheet - Japanese Corporate Style
+     Theme: Trust, Order, Cleanliness
      ========================================== */
   
   :root {
-    --scu-red: #d93025;
-    --scu-black: #1a1a1a;
-    --scu-blue: #004d7a;
-    --bg-light: #f8f9fa;
-    --white: #ffffff;
-    --navbar-height: 60px;
+    /* Color Palette */
+    --jp-navy: #0F2350;       /* Katsu-iro: Victory Blue (Trustworthy) */
+    --jp-red: #B00020;        /* Akane: Deep Red (Accent/Seal) */
+    --jp-text-main: #333333;  /* Charcoal (Primary Text) */
+    --jp-text-sub: #666666;   /* Gray (Secondary Text) */
+    --jp-bg-body: #f4f5f7;    /* Cool Light Gray (Background) */
+    --jp-bg-white: #ffffff;   /* Pure White (Card Background) */
+    --jp-border: #e6e6e6;     /* Subtle Border */
+    
+    /* Dimensions & Spacing */
+    --navbar-height: 70px;
+    --border-radius-sm: 2px;  /* Sharp/Minimal radius */
+    --border-radius-md: 4px;
+    
+    /* Typography */
+    --font-main: "Noto Sans JP", "Noto Sans TC", sans-serif;
+    --font-serif: "Noto Serif JP", serif;
   }
 
-  /* --- Global --- */
+  /* --- Global Reset & Typography --- */
   * { box-sizing: border-box; }
+  
   body, html { 
     margin: 0; 
     padding: 0; 
-    font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; 
-    background-color: var(--bg-light); 
-    color: var(--scu-black);
+    font-family: var(--font-main);
+    background-color: var(--jp-bg-body); 
+    color: var(--jp-text-main);
     display: flex; 
     flex-direction: column; 
-    min-height: 100vh; 
+    min-height: 100vh;
+    line-height: 1.6;
+    letter-spacing: 0.04em; /* Enhanced readability */
   }
 
-  /* --- Navbar --- */
+  /* --- Navigation Bar --- */
   .navbar {
     position: sticky;
     top: 0;
     width: 100%;
     height: var(--navbar-height);
-    background-color: var(--white);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background-color: var(--jp-bg-white);
+    border-bottom: 1px solid rgba(0,0,0,0.06); 
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 40px;
   }
   
   .nav-brand {
     display: flex;
     align-items: center;
     font-size: 20px;
-    font-weight: bold;
-    color: var(--scu-black);
+    font-weight: 700;
+    color: var(--jp-navy);
     text-decoration: none;
+    letter-spacing: 0.1em;
   }
   
   .nav-brand i {
-    color: var(--scu-red);
-    margin-right: 10px;
-    font-size: 24px;
+    color: var(--jp-navy);
+    margin-right: 12px;
+    font-size: 22px;
   }
 
   .nav-menu {
     display: flex;
-    gap: 20px;
+    gap: 30px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -124,39 +156,38 @@
 
   .nav-link {
     text-decoration: none;
-    color: #555;
+    color: var(--jp-text-main);
     font-weight: 500;
-    font-size: 15px;
-    transition: color 0.3s;
-    padding: 5px 10px;
-    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s;
+    padding: 24px 0;
+    position: relative;
+    border-bottom: 2px solid transparent;
   }
 
-  .nav-link:hover {
-    color: var(--scu-red);
-    background-color: #fce8e6;
+  .nav-link:hover { 
+    color: var(--jp-navy);
+    border-bottom-color: var(--jp-red); 
   }
 
-  /* Mobile Hamburger */
   .hamburger {
     display: none;
     cursor: pointer;
-    font-size: 24px;
-    color: #333;
+    font-size: 20px;
+    color: var(--jp-navy);
   }
 
-  /* --- Header Banner --- */
+  /* --- Hero Header Section --- */
   .page-header {
     width: 100%; 
-    height: 280px;
+    height: 320px;
     background-color: #333;
     background-size: cover; 
     display: flex; 
     align-items: center; 
     justify-content: center;
     color: white; 
-    text-shadow: 0 2px 8px rgba(0,0,0,0.7); 
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     position: relative;
   }
   
@@ -164,211 +195,226 @@
   .page-header::before {
     content: '';
     position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 35, 80, 0.6); /* Navy overlay */
   }
 
   .header-content {
     position: relative;
     z-index: 1;
     text-align: center;
+    padding: 40px 80px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--border-radius-sm);
   }
 
   .header-title { 
-    font-size: 42px; 
-    font-weight: bold; 
-    letter-spacing: 3px;
+    font-size: 36px; 
+    font-weight: 500; 
+    letter-spacing: 0.25em; 
     margin: 0; 
+    font-family: var(--font-serif);
   }
   .header-subtitle {
-    font-size: 18px;
-    margin-top: 10px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    color: #f0f0f0;
+    font-size: 13px;
+    margin-top: 18px;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.9);
+    text-transform: uppercase;
   }
 
-  /* --- Main Container --- */
+  /* --- Main Layout Container --- */
   .main-container {
-    max-width: 1200px; 
+    max-width: 1100px;
     margin: 0 auto; 
     padding: 0 20px;
     display: flex; 
     flex-wrap: wrap; 
-    gap: 40px; 
+    gap: 60px;
     align-items: flex-start;
     flex: 1; 
     width: 100%;
   }
 
-  /* Video Section */
+  /* --- Video Component --- */
   .video-section { flex: 3; min-width: 300px; }
   .video-wrapper {
     position: relative; 
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    padding-bottom: 56.25%; 
     height: 0; 
     background: #000; 
-    border-radius: 12px; 
+    border-radius: var(--border-radius-sm); 
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06); 
   }
   .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
   
   .video-caption { 
-    margin-top: 20px; 
-    padding: 15px;
-    background: white;
-    border-radius: 8px;
-    border-left: 4px solid var(--scu-red);
-    color: #555; 
-    font-size: 15px; 
-    line-height: 1.6;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 25px; 
+    padding: 0 0 0 15px;
+    background: transparent;
+    border: none;
+    border-left: 2px solid var(--jp-red);
+    color: var(--jp-text-sub); 
+    font-size: 14px; 
+    line-height: 1.8;
   }
 
-  /* Menu Section */
+  /* --- Menu Component --- */
   .menu-section {
     flex: 2; 
     min-width: 300px; 
-    background: #fff; 
-    padding: 25px;
-    border-radius: 12px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    background: var(--jp-bg-white); 
+    padding: 40px;
+    border-radius: var(--border-radius-sm); 
+    border: 1px solid var(--jp-border);
   }
 
-  /* Toggle Buttons */
+  /* View Toggle Buttons */
   .toggle-wrapper { 
     display: flex; 
     justify-content: flex-start; 
     flex-wrap: wrap; 
-    margin-bottom: 25px; 
-    gap: 12px;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed #eee;
+    margin-bottom: 35px; 
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--jp-border);
   }
   input[name="view-mode"] { display: none; }
     
   .toggle-btn {
-    padding: 8px 18px; 
-    border: 1px solid var(--scu-blue); 
-    border-radius: 50px;
+    padding: 8px 24px; 
+    border: 1px solid var(--jp-navy); 
+    border-radius: var(--border-radius-sm);
     cursor: pointer; 
-    font-size: 15px; 
-    font-weight: bold; 
-    color: var(--scu-blue);
-    transition: all 0.3s ease; 
+    font-size: 13px; 
+    font-weight: 500; 
+    color: var(--jp-navy);
+    transition: all 0.2s ease; 
     display: flex; 
     align-items: center; 
-    gap: 6px;
+    gap: 8px;
     white-space: nowrap; 
     background: transparent;
   }
-  .toggle-btn:hover { background-color: #f0f8ff; transform: translateY(-1px); }
+  .toggle-btn:hover { background-color: rgba(15, 35, 80, 0.03); }
 
-  /* Toggle States */
+  /* Active States */
   input#mode-all:checked ~ .menu-section .toggle-wrapper label[for="mode-all"],
   input#mode-recruiting:checked ~ .menu-section .toggle-wrapper label[for="mode-recruiting"] {
-    background-color: var(--scu-blue); 
+    background-color: var(--jp-navy); 
     color: #fff;
-    box-shadow: 0 2px 5px rgba(0,77,122,0.3);
   }
+  
   input#mode-recruiting:checked ~ .menu-section .toggle-wrapper label[for="mode-recruiting"] {
-    background-color: var(--scu-red); 
-    border-color: var(--scu-red);
-    box-shadow: 0 2px 5px rgba(217,48,37,0.3);
+    background-color: var(--jp-red); 
+    border-color: var(--jp-red);
   }
 
-  /* Menu List */
-  .category-group { margin-bottom: 30px; }
-  .category-group:last-child { margin-bottom: 0; }
+  /* Menu Listings */
+  .category-group { margin-bottom: 50px; }
+  .category-group:last-child { margin-bottom: 10px; }
 
   h3.menu-title { 
-    font-size: 18px; 
-    color: #555; 
-    border-left: 5px solid #8B4513; 
-    padding-left: 10px;
-    margin: 0 0 15px 0; 
+    font-size: 15px; 
+    color: var(--jp-navy); 
+    border-bottom: 2px solid var(--jp-navy); 
+    padding-bottom: 8px;
+    margin: 0 0 20px 0; 
     font-weight: 700; 
-    background: #fdfdfd;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    display: inline-block;
+    min-width: 60px;
+    letter-spacing: 0.1em;
   }
   
   ul.menu-list { list-style-type: none; padding: 0; margin: 0; }
-  li.menu-item { margin-bottom: 10px; display: block; width: 100%; }
+  li.menu-item { margin-bottom: 0; display: block; width: 100%; }
 
   a.menu-link {
     text-decoration: none; 
-    color: var(--scu-blue); 
-    font-size: 16px; 
-    font-weight: 600;
+    color: var(--jp-text-main); 
+    font-size: 15px; 
+    font-weight: 400;
     display: flex; 
     align-items: center; 
-    padding: 10px 15px; 
+    padding: 16px 10px; 
     line-height: 1.4; 
     justify-content: space-between;
-    background-color: #f8fbff;
-    border-radius: 6px;
+    border-bottom: 1px solid var(--jp-border);
     transition: all 0.2s ease;
-    border: 1px solid transparent;
   }
   
   a.menu-link:hover { 
-    color: #8B4513; 
-    background-color: #fff; 
-    border-color: #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    color: var(--jp-navy); 
+    background-color: rgba(15, 35, 80, 0.02); 
+    padding-left: 18px; 
+    border-bottom-color: var(--jp-navy);
   }
   
   .link-content { display: flex; align-items: center; }
-  .arrow-icon { color: #ccc; font-size: 14px; transition: transform 0.2s; }
-  a.menu-link:hover .arrow-icon { transform: translateX(3px); color: #8B4513; }
+  .arrow-icon { color: #ccc; font-size: 10px; opacity: 0.7; }
+  a.menu-link:hover .arrow-icon { color: var(--jp-navy); opacity: 1; }
 
-  /* Hot/Status Tag */
+  /* Status Tag (Hanko Style) */
   .tag-hot {
-    background-color: var(--scu-red); 
-    color: white; 
+    background-color: #fff;
+    color: var(--jp-red); 
+    border: 1px solid var(--jp-red);
     font-size: 11px;
-    padding: 3px 8px; 
-    border-radius: 12px; 
-    margin-left: 10px;
+    padding: 2px 8px; 
+    border-radius: var(--border-radius-sm); 
+    margin-left: 12px;
     white-space: nowrap; 
     display: none; 
-    font-weight: normal;
+    font-weight: 500;
+    letter-spacing: 0.05em;
     animation: fadeIn 0.5s;
   }
   li.status-active .tag-hot { display: inline-block; }
+  li.status-active a.menu-link { font-weight: 500; }
 
   @keyframes fadeIn {
     from { opacity: 0; } to { opacity: 1; }
   }
 
-  /* --- Footer --- */
+  /* --- Footer Section --- */
   .page-footer {
     width: 100%; 
-    background-color: var(--scu-black); 
-    color: #bbb;
-    padding: 50px 20px; 
-    margin-top: 80px; 
+    background-color: var(--jp-navy); 
+    color: rgba(255,255,255,0.7);
+    padding: 60px 20px; 
+    margin-top: 100px; 
     text-align: center; 
-    font-size: 15px; 
-    line-height: 1.8;
+    font-size: 13px; 
+    line-height: 2;
+    font-weight: 300;
   }
   .footer-title { 
-    font-size: 20px; 
-    font-weight: bold; 
-    margin-bottom: 15px; 
+    font-size: 18px; 
+    font-weight: 500; 
+    margin-bottom: 25px; 
     color: #fff; 
-    letter-spacing: 1px; 
+    letter-spacing: 0.15em; 
   }
-  .footer-info i { margin-right: 8px; color: var(--scu-red); }
-  .footer-link { color: #ddd; text-decoration: none; transition: color 0.3s; border-bottom: 1px dotted #666; }
+  .footer-info i { margin-right: 8px; color: rgba(255,255,255,0.4); }
+  .footer-link { color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s; border-bottom: 1px solid rgba(255,255,255,0.2); }
   .footer-link:hover { color: #fff; border-bottom: 1px solid #fff; }
-  .copyright { margin-top: 30px; font-size: 13px; color: #666; border-top: 1px solid #333; padding-top: 20px; }
+  .copyright { 
+    margin-top: 40px; 
+    font-size: 11px; 
+    color: rgba(255,255,255,0.4); 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+    padding-top: 25px; 
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 
-  /* --- Responsive (Mobile) --- */
+  /* --- Mobile Responsive Design --- */
   @media (max-width: 768px) {
-    .navbar { padding: 0 15px; }
+    .navbar { padding: 0 20px; }
     
     .hamburger { display: block; }
     
@@ -380,25 +426,31 @@
       width: 100%;
       background-color: white;
       flex-direction: column;
-      box-shadow: 0 4px 5px rgba(0,0,0,0.1);
-      padding: 10px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 0;
       gap: 0;
+      border-bottom: 1px solid var(--jp-border);
     }
     
     .nav-menu.active { display: flex; }
     
     .nav-link {
       display: block;
-      padding: 15px 20px;
-      border-bottom: 1px solid #f0f0f0;
+      padding: 18px 25px;
+      border-bottom: 1px solid var(--jp-border);
+      color: var(--jp-text-main);
     }
+    .nav-link:hover { border-bottom-color: var(--jp-border); background-color: #fafafa; }
 
-    .page-header { height: 180px; }
-    .header-title { font-size: 28px; }
-    .header-subtitle { font-size: 14px; }
+    .page-header { height: 220px; margin-bottom: 40px; }
+    .header-content { padding: 30px; width: 90%; }
+    .header-title { font-size: 24px; letter-spacing: 0.15em; }
+    .header-subtitle { font-size: 11px; }
     
-    .main-container { flex-direction: column; gap: 30px; }
+    .main-container { flex-direction: column; gap: 40px; }
     .video-section, .menu-section { width: 100%; }
+    
+    .menu-section { padding: 25px 20px; }
     
     .toggle-wrapper { justify-content: space-between; }
     .toggle-btn { flex: 1; justify-content: center; }
@@ -407,7 +459,7 @@
 </head>
 <body>
 
-  <!-- 1. Navbar -->
+  <!-- 1. Navigation -->
   <nav class="navbar">
     <a href="#" class="nav-brand">
       <i class="fa-solid fa-graduation-cap"></i> 東吳大學招生專區
@@ -432,21 +484,16 @@
     </div>
   </header>
 
-  <!-- Hidden Radio Buttons (State Control) -->
+  <!-- State Control (Hidden Radio Buttons) -->
   <input type="radio" name="view-mode" id="mode-recruiting" checked onchange="filterContent()">
   <input type="radio" name="view-mode" id="mode-all" onchange="filterContent()">
 
-  <!-- 3. Main Content -->
+  <!-- 3. Main Content Container -->
   <div class="main-container">
     
-    <!-- Left: Video Section -->
+    <!-- Left Column: Video Introduction -->
     <div class="video-section">
       <div class="video-wrapper">
-        <!-- 
-          YouTube Embed:
-          - domain: youtube-nocookie.com (Privacy enhanced)
-          - referrerpolicy: strict-origin-when-cross-origin (Security)
-        -->
         <iframe 
             width="800" 
             height="450" 
@@ -459,14 +506,14 @@
         </iframe>
       </div>
       <div class="video-caption">
-        <strong><i class="fa-brands fa-youtube" style="color:red;"></i> 東吳大學簡介影片「過去‧現在‧未來」篇</strong><br>
+        <strong><i class="fa-brands fa-youtube" style="color:var(--jp-red);"></i> 東吳大學簡介影片「過去‧現在‧未來」篇</strong><br>
         點擊觀看東吳大學的校園環境與教學特色介紹，探索您的未來可能。
       </div>
     </div>
 
-    <!-- Right: Admission Menu -->
+    <!-- Right Column: Admission Categories -->
     <div class="menu-section">
-      <!-- Toggle Buttons -->
+      <!-- Filter Controls -->
       <div class="toggle-wrapper">
         <label class="toggle-btn" for="mode-recruiting">
           <i class="fa-solid fa-fire"></i> 顯示招生中
@@ -476,7 +523,7 @@
         </label>
       </div>
 
-      <!-- Bachelor -->
+      <!-- Category: Bachelor -->
       <div class="category-group">
         <h3 class="menu-title">學士班</h3>
         <ul class="menu-list">
@@ -490,7 +537,7 @@
         </ul>
       </div>
 
-      <!-- Master & PhD -->
+      <!-- Category: Master & PhD -->
       <div class="category-group">
         <h3 class="menu-title">碩博士班</h3>
         <ul class="menu-list">
@@ -501,7 +548,7 @@
         </ul>
       </div>
 
-      <!-- International -->
+      <!-- Category: International -->
       <div class="category-group">
         <h3 class="menu-title">境外招生</h3>
         <ul class="menu-list">
@@ -526,11 +573,15 @@
     </div>
   </footer>
 
+  <!-- 
+    ==========================================
+    Client-Side Logic
+    ==========================================
+  -->
   <script>
     /**
-     * ==========================================
-     * Core Application Logic
-     * ==========================================
+     * Initialize Page Function
+     * Sets up the banner background and applies initial filters.
      */
     function initPage() {
       // 1. Initialize Header Background
@@ -546,7 +597,10 @@
       filterContent();
     }
 
-    // Apply active status styling based on configuration
+    /**
+     * Apply Status Config
+     * Iterates through menu items and adds 'status-active' class based on CONFIG_ADMISSION_STATUS.
+     */
     function applyStatusConfig() {
       const items = document.querySelectorAll('.menu-item');
       items.forEach(item => {
@@ -563,12 +617,16 @@
       });
     }
 
-    // Filter Logic: Toggle between 'All' and 'Recruiting' modes
+    /**
+     * Filter Content Logic
+     * Toggles visibility of menu items based on the selected view mode (Recruiting vs All).
+     */
     function filterContent() {
       const isRecruitingMode = document.getElementById('mode-recruiting').checked;
       const allItems = document.querySelectorAll('.menu-item');
       const allGroups = document.querySelectorAll('.category-group');
 
+      // Filter individual items
       allItems.forEach(item => {
         if (isRecruitingMode) {
           // Show only items with 'status-active' class in recruiting mode
@@ -587,14 +645,17 @@
       });
     }
 
-    // Mobile Menu Toggle
+    /**
+     * Mobile Menu Toggle
+     * Handles the opening/closing of the navbar menu on mobile devices.
+     */
     function toggleMenu() {
       const navMenu = document.getElementById('navMenu');
       navMenu.classList.toggle('active');
     }
 
-    // Execute Initialization
-    initPage();
+    // Execute Initialization on Load
+    window.addEventListener('DOMContentLoaded', initPage);
   </script>
 </body>
 </html>
