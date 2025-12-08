@@ -6,12 +6,39 @@
 
 <!-- 
   ==========================================
-  SEO & Metadata Configuration
+  1. Security & Privacy Configuration (InfoSec)
   ==========================================
 -->
-<meta name="description" content="東吳大學招生專區提供最新入學資訊，涵蓋學士班（特殊選才、繁星推薦、申請入學、轉學考、運動績優）、碩博士班（甄試、考試、在職專班）及境外招生（外國學生、僑港澳生）等多元管道，歡迎加入東吳。">
+<!-- 
+  Content Security Policy (CSP):
+  - Limits script/style/font/image sources to trusted domains only.
+  - Prevents XSS and malicious data injection.
+  - 'unsafe-inline' is retained for the internal script/style blocks required by this single-file architecture.
+-->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self'; 
+  script-src 'self' 'unsafe-inline'; 
+  style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; 
+  font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; 
+  img-src 'self' https://www.scu.edu.tw data:; 
+  frame-src https://www.youtube-nocookie.com;
+  connect-src 'self';
+">
+
+<!-- Prevent MIME type sniffing security risk -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+<!-- Referrer Policy: Protect user path information when clicking external links -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- 
+  ==========================================
+  2. SEO & Metadata Configuration
+  ==========================================
+-->
+<meta name="description" content="東吳大學招生專區提供最新入學資訊，涵蓋學士班、碩博士班及境外招生等多元管道。">
 <meta property="og:title" content="東吳大學招生專區">
-<meta property="og:description" content="東吳大學招生專區：學士班、碩博士班及境外招生一站式資訊入口。包含特殊選才、申請入學、轉學考、碩博考試及僑外生入學等完整簡章與報名資訊。">
+<meta property="og:description" content="東吳大學招生專區：學士班、碩博士班及境外招生一站式資訊入口。">
 <meta property="og:image" content="https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg">
 
 <!-- Favicon -->
@@ -20,7 +47,7 @@
 
 <!-- 
   ==========================================
-  External Resources
+  3. External Resources
   ==========================================
 -->
 <!-- FontAwesome for Icons -->
@@ -32,74 +59,75 @@
 
 <!-- 
   ==========================================
-  Global Configuration
+  4. Global Configuration (Business Logic)
   ==========================================
 -->
 <script>
+  'use strict';
+
   /**
-   * Banner Configuration
-   * @type {string} CONFIG_BANNER_IMG - The URL for the header background image.
-   * @type {string} CONFIG_BANNER_POS - CSS background-position property (e.g., 'center', 'bottom').
+   * Banner Image Configuration
+   * @constant {string} CONFIG_BANNER_IMG - URL for the header background.
    */
   const CONFIG_BANNER_IMG = 'https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg';
   const CONFIG_BANNER_POS = 'bottom'; 
 
   /**
-   * Admission Status Configuration
-   * Controls the visibility of the "Recruiting" (招生中) tag.
-   * 'Y': Active (Show tag)
-   * 'N': Inactive (Hide tag)
+   * Admission Status Configuration Map
+   * Maps the specific admission channel ID (matched with data-id in HTML) to its status.
+   * - 'Y': Active (Displays "Recruiting" tag)
+   * - 'N': Inactive (Hides tag)
+   * * @constant {Object.<string, string>}
    */
   const CONFIG_ADMISSION_STATUS = {
     // === Bachelor Degree ===
-    "大學特殊選才": 'Y',
-    "大學申請入學": 'N',
-    "大學繁星推薦": 'N',
-    "寒假轉學考試": 'Y',
-    "暑假轉學考試": 'N',
-    "四技二專入學": 'N',
-    "運動績優單獨招生": 'N',
+    "bachelor_special": 'Y',    // 大學特殊選才
+    "bachelor_winter": 'Y',     // 寒假轉學考試
+    "bachelor_summer": 'N',     // 暑假轉學考試
+    "bachelor_apply": 'N',      // 大學申請入學
+    "bachelor_star": 'N',       // 大學繁星推薦
+    "bachelor_tech": 'N',       // 四技二專入學
+    "bachelor_sport": 'N',      // 運動績優單獨招生
     
     // === Master & PhD Degrees ===
-    "碩士班甄試": 'N',
-    "碩士班考試": 'Y',
-    "碩士在職專班": 'Y',
-    "博士班": 'N',
+    "master_exam": 'Y',         // 碩士班考試
+    "master_pro": 'Y',          // 碩士在職專班
+    "master_recommend": 'N',    // 碩士班甄試
+    "phd": 'N',                 // 博士班
     
     // === International Students ===
-    "外國學生申請入學": 'Y',
-    "新型專班": 'N',
-    "僑生暨港澳生": 'N'
+    "intl_student": 'Y',        // 外國學生申請入學
+    "intl_new_special": 'N',    // 新型專班
+    "intl_overseas": 'N'        // 僑生暨港澳生
   };
 </script>
 
 <style>
   /* ==========================================
-     CSS Stylesheet - Japanese Corporate Style
+     5. CSS Stylesheet - Japanese Corporate Style
      Theme: Trust, Order, Cleanliness
      ========================================== */
   
   :root {
-    /* Color Palette */
+    /* --- Color Palette --- */
     --jp-navy: #0F2350;       /* Katsu-iro: Victory Blue (Trustworthy) */
     --jp-red: #B00020;        /* Akane: Deep Red (Accent/Seal) */
     --jp-text-main: #333333;  /* Charcoal (Primary Text) */
     --jp-text-sub: #666666;   /* Gray (Secondary Text) */
     --jp-bg-body: #f4f5f7;    /* Cool Light Gray (Background) */
-    --jp-bg-white: #ffffff;   /* Pure White (Card Background) */
+    --jp-bg-white: #ffffff;   /* Pure White (Component Background) */
     --jp-border: #e6e6e6;     /* Subtle Border */
     
-    /* Dimensions & Spacing */
+    /* --- Layout & Spacing --- */
     --navbar-height: 70px;
-    --border-radius-sm: 2px;  /* Sharp/Minimal radius */
-    --border-radius-md: 4px;
+    --border-radius-sm: 2px;  /* Sharp/Minimal radius for professional look */
     
-    /* Typography */
+    /* --- Typography --- */
     --font-main: "Noto Sans JP", "Noto Sans TC", sans-serif;
     --font-serif: "Noto Serif JP", serif;
   }
 
-  /* --- Global Reset & Typography --- */
+  /* --- Reset & Base --- */
   * { box-sizing: border-box; }
   
   body, html { 
@@ -112,7 +140,7 @@
     flex-direction: column; 
     min-height: 100vh;
     line-height: 1.6;
-    letter-spacing: 0.04em; /* Enhanced readability */
+    letter-spacing: 0.04em;
   }
 
   /* --- Navigation Bar --- */
@@ -177,11 +205,11 @@
     color: var(--jp-navy);
   }
 
-  /* --- Hero Header Section --- */
+  /* --- Header Banner --- */
   .page-header {
     width: 100%; 
     height: 320px;
-    background-color: #333;
+    background-color: #333; /* Fallback color */
     background-size: cover; 
     display: flex; 
     align-items: center; 
@@ -191,12 +219,12 @@
     position: relative;
   }
   
-  /* Overlay */
+  /* Overlay for text readability */
   .page-header::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(15, 35, 80, 0.6); /* Navy overlay */
+    background: rgba(15, 35, 80, 0.6); /* Navy tint */
   }
 
   .header-content {
@@ -226,7 +254,7 @@
     text-transform: uppercase;
   }
 
-  /* --- Main Layout Container --- */
+  /* --- Main Container --- */
   .main-container {
     max-width: 1100px;
     margin: 0 auto; 
@@ -239,11 +267,11 @@
     width: 100%;
   }
 
-  /* --- Video Component --- */
+  /* --- Video Section --- */
   .video-section { flex: 3; min-width: 300px; }
   .video-wrapper {
     position: relative; 
-    padding-bottom: 56.25%; 
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
     height: 0; 
     background: #000; 
     border-radius: var(--border-radius-sm); 
@@ -254,16 +282,14 @@
   
   .video-caption { 
     margin-top: 25px; 
-    padding: 0 0 0 15px;
-    background: transparent;
-    border: none;
+    padding-left: 15px;
     border-left: 2px solid var(--jp-red);
     color: var(--jp-text-sub); 
     font-size: 14px; 
     line-height: 1.8;
   }
 
-  /* --- Menu Component --- */
+  /* --- Menu Section --- */
   .menu-section {
     flex: 2; 
     min-width: 300px; 
@@ -273,7 +299,7 @@
     border: 1px solid var(--jp-border);
   }
 
-  /* View Toggle Buttons */
+  /* Toggle Buttons */
   .toggle-wrapper { 
     display: flex; 
     justify-content: flex-start; 
@@ -302,19 +328,18 @@
   }
   .toggle-btn:hover { background-color: rgba(15, 35, 80, 0.03); }
 
-  /* Active States */
+  /* Toggle Active States */
   input#mode-all:checked ~ .menu-section .toggle-wrapper label[for="mode-all"],
   input#mode-recruiting:checked ~ .menu-section .toggle-wrapper label[for="mode-recruiting"] {
     background-color: var(--jp-navy); 
     color: #fff;
   }
-  
   input#mode-recruiting:checked ~ .menu-section .toggle-wrapper label[for="mode-recruiting"] {
     background-color: var(--jp-red); 
     border-color: var(--jp-red);
   }
 
-  /* Menu Listings */
+  /* Menu List Layout */
   .category-group { margin-bottom: 50px; }
   .category-group:last-child { margin-bottom: 10px; }
 
@@ -358,7 +383,7 @@
   .arrow-icon { color: #ccc; font-size: 10px; opacity: 0.7; }
   a.menu-link:hover .arrow-icon { color: var(--jp-navy); opacity: 1; }
 
-  /* Status Tag (Hanko Style) */
+  /* Recruiting Tag (Hanko Style) */
   .tag-hot {
     background-color: #fff;
     color: var(--jp-red); 
@@ -373,6 +398,7 @@
     letter-spacing: 0.05em;
     animation: fadeIn 0.5s;
   }
+  /* Show tag only when parent li has 'status-active' */
   li.status-active .tag-hot { display: inline-block; }
   li.status-active a.menu-link { font-weight: 500; }
 
@@ -380,7 +406,7 @@
     from { opacity: 0; } to { opacity: 1; }
   }
 
-  /* --- Footer Section --- */
+  /* --- Footer --- */
   .page-footer {
     width: 100%; 
     background-color: var(--jp-navy); 
@@ -412,7 +438,7 @@
     text-transform: uppercase;
   }
 
-  /* --- Mobile Responsive Design --- */
+  /* --- Mobile Responsive --- */
   @media (max-width: 768px) {
     .navbar { padding: 0 20px; }
     
@@ -484,14 +510,14 @@
     </div>
   </header>
 
-  <!-- State Control (Hidden Radio Buttons) -->
+  <!-- State Control (Hidden Inputs) -->
   <input type="radio" name="view-mode" id="mode-recruiting" checked onchange="filterContent()">
   <input type="radio" name="view-mode" id="mode-all" onchange="filterContent()">
 
-  <!-- 3. Main Content Container -->
+  <!-- 3. Main Content -->
   <div class="main-container">
     
-    <!-- Left Column: Video Introduction -->
+    <!-- Left Column: Video -->
     <div class="video-section">
       <div class="video-wrapper">
         <iframe 
@@ -511,7 +537,7 @@
       </div>
     </div>
 
-    <!-- Right Column: Admission Categories -->
+    <!-- Right Column: Admission List -->
     <div class="menu-section">
       <!-- Filter Controls -->
       <div class="toggle-wrapper">
@@ -523,17 +549,22 @@
         </label>
       </div>
 
+      <!-- 
+        NOTE: Updated 'data-id' attributes for robust logic binding.
+        This allows changing the display text without breaking the functionality.
+      -->
+
       <!-- Category: Bachelor -->
       <div class="category-group">
         <h3 class="menu-title">學士班</h3>
         <ul class="menu-list">
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%A4%A7%E5%AD%B8%E7%89%B9%E6%AE%8A%E9%81%B8%E6%89%8D" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">大學特殊選才 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%AF%92%E5%81%87%E8%BD%89%E5%AD%B8%E8%80%83%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">寒假轉學考試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E6%9A%91%E5%81%87%E8%BD%89%E5%AD%B8%E8%80%83%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">暑假轉學考試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%94%B3%E8%AB%8B%E5%85%A5%E5%AD%B8" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">大學申請入學 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%B9%81%E6%98%9F%E6%8E%A8%E8%96%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">大學繁星推薦 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%9B%9B%E6%8A%80%E4%BA%8C%E5%B0%88%E7%94%84%E9%81%B8%E5%85%A5%E5%AD%B8" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">四技二專入學 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E9%81%8B%E5%8B%95%E7%B8%BE%E5%84%AA%E5%96%AE%E7%8D%A8%E6%8B%9B%E7%94%9F" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">運動績優單獨招生 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="bachelor_special"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%A4%A7%E5%AD%B8%E7%89%B9%E6%AE%8A%E9%81%B8%E6%89%8D" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">大學特殊選才 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="bachelor_winter"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%AF%92%E5%81%87%E8%BD%89%E5%AD%B8%E8%80%83%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">寒假轉學考試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="bachelor_summer"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E6%9A%91%E5%81%87%E8%BD%89%E5%AD%B8%E8%80%83%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">暑假轉學考試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="bachelor_apply"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%94%B3%E8%AB%8B%E5%85%A5%E5%AD%B8" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">大學申請入學 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="bachelor_star"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%B9%81%E6%98%9F%E6%8E%A8%E8%96%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">大學繁星推薦 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="bachelor_tech"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%9B%9B%E6%8A%80%E4%BA%8C%E5%B0%88%E7%94%84%E9%81%B8%E5%85%A5%E5%AD%B8" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">四技二專入學 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="bachelor_sport"><a href="https://entrance.exam.scu.edu.tw/news/%E5%AD%B8%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E9%81%8B%E5%8B%95%E7%B8%BE%E5%84%AA%E5%96%AE%E7%8D%A8%E6%8B%9B%E7%94%9F" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">運動績優單獨招生 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
         </ul>
       </div>
 
@@ -541,10 +572,10 @@
       <div class="category-group">
         <h3 class="menu-title">碩博士班</h3>
         <ul class="menu-list">
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%A2%A9%E5%A3%AB%E7%8F%AD%E8%80%83%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">碩士班考試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%A2%A9%E5%A3%AB%E7%8F%AD%E5%9C%A8%E8%81%B7%E5%B0%88%E7%8F%AD" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">碩士在職專班 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%A2%A9%E5%A3%AB%E7%8F%AD%E7%94%84%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">碩士班甄試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%8D%9A%E5%A3%AB%E7%8F%AD" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">博士班 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="master_exam"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%A2%A9%E5%A3%AB%E7%8F%AD%E8%80%83%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">碩士班考試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="master_pro"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%A2%A9%E5%A3%AB%E7%8F%AD%E5%9C%A8%E8%81%B7%E5%B0%88%E7%8F%AD" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">碩士在職專班 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="master_recommend"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E7%A2%A9%E5%A3%AB%E7%8F%AD%E7%94%84%E8%A9%A6" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">碩士班甄試 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="phd"><a href="https://entrance.exam.scu.edu.tw/news/%E7%A2%A9%E5%8D%9A%E5%A3%AB%E5%AD%B8%E4%BD%8D%E6%8B%9B%E7%94%9F/%E5%8D%9A%E5%A3%AB%E7%8F%AD" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">博士班 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
         </ul>
       </div>
 
@@ -552,9 +583,9 @@
       <div class="category-group">
         <h3 class="menu-title">境外招生</h3>
         <ul class="menu-list">
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%A2%83%E5%A4%96%E7%94%9F%E6%8B%9B%E7%94%9F/%E5%A4%96%E5%9C%8B%E5%AD%B8%E7%94%9F%E7%94%B3%E8%AB%8B%E5%85%A5%E5%AD%B8" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">外國學生申請入學 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%A2%83%E5%A4%96%E7%94%9F%E6%8B%9B%E7%94%9F/%E6%96%B0%E5%9E%8B%E5%B0%88%E7%8F%AD%E6%8B%9B%E7%94%9F" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">新型專班 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
-          <li class="menu-item"><a href="https://entrance.exam.scu.edu.tw/news/%E5%A2%83%E5%A4%96%E7%94%9F%E6%8B%9B%E7%94%9F/%E5%83%91%E7%94%9F%E6%9A%A8%E6%B8%AF%E6%BE%B3%E7%94%9F%E5%96%AE%E6%8B%9B" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">僑生暨港澳生 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="intl_student"><a href="https://entrance.exam.scu.edu.tw/news/%E5%A2%83%E5%A4%96%E7%94%9F%E6%8B%9B%E7%94%9F/%E5%A4%96%E5%9C%8B%E5%AD%B8%E7%94%9F%E7%94%B3%E8%AB%8B%E5%85%A5%E5%AD%B8" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">外國學生申請入學 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="intl_new_special"><a href="https://entrance.exam.scu.edu.tw/news/%E5%A2%83%E5%A4%96%E7%94%9F%E6%8B%9B%E7%94%9F/%E6%96%B0%E5%9E%8B%E5%B0%88%E7%8F%AD%E6%8B%9B%E7%94%9F" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">新型專班 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
+          <li class="menu-item" data-id="intl_overseas"><a href="https://entrance.exam.scu.edu.tw/news/%E5%A2%83%E5%A4%96%E7%94%9F%E6%8B%9B%E7%94%9F/%E5%83%91%E7%94%9F%E6%9A%A8%E6%B8%AF%E6%BE%B3%E7%94%9F%E5%96%AE%E6%8B%9B" target="_blank" rel="noopener noreferrer" class="menu-link"><div class="link-content">僑生暨港澳生 <span class="tag-hot">招生中</span></div> <span class="arrow-icon"><i class="fa-solid fa-chevron-right"></i></span></a></li>
         </ul>
       </div>
 
@@ -575,12 +606,12 @@
 
   <!-- 
     ==========================================
-    Client-Side Logic
+    5. Client-Side Application Logic
     ==========================================
   -->
   <script>
     /**
-     * Initialize Page Function
+     * Initializes the page when the DOM is fully loaded.
      * Sets up the banner background and applies initial filters.
      */
     function initPage() {
@@ -598,18 +629,17 @@
     }
 
     /**
-     * Apply Status Config
-     * Iterates through menu items and adds 'status-active' class based on CONFIG_ADMISSION_STATUS.
+     * Applies the admission status configuration to the DOM elements.
+     * Iterates through menu items and adds 'status-active' class based on 'data-id'.
+     * This logic is decoupled from the display text for better maintainability.
      */
     function applyStatusConfig() {
       const items = document.querySelectorAll('.menu-item');
       items.forEach(item => {
-        const contentDiv = item.querySelector('.link-content');
-        const fullName = contentDiv.innerText.trim();
-        // Remove "招生中" text to match config key
-        const name = fullName.replace('招生中', '').trim();
+        const id = item.getAttribute('data-id');
         
-        if (CONFIG_ADMISSION_STATUS[name] === 'Y') {
+        // If the ID exists in config and is set to 'Y', activate the status
+        if (id && CONFIG_ADMISSION_STATUS[id] === 'Y') {
           item.classList.add('status-active');
         } else {
           item.classList.remove('status-active');
@@ -618,8 +648,8 @@
     }
 
     /**
-     * Filter Content Logic
-     * Toggles visibility of menu items based on the selected view mode (Recruiting vs All).
+     * Filters content based on the selected view mode (Recruiting vs All).
+     * Toggles visibility of menu items and hides empty category groups.
      */
     function filterContent() {
       const isRecruitingMode = document.getElementById('mode-recruiting').checked;
@@ -632,6 +662,7 @@
           // Show only items with 'status-active' class in recruiting mode
           item.style.display = item.classList.contains('status-active') ? 'block' : 'none';
         } else {
+          // Show all items in 'All' mode
           item.style.display = 'block';
         }
       });
@@ -646,7 +677,7 @@
     }
 
     /**
-     * Mobile Menu Toggle
+     * Toggles the mobile navigation menu.
      * Handles the opening/closing of the navbar menu on mobile devices.
      */
     function toggleMenu() {
