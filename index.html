@@ -5,15 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- 
-  ==========================================
-  1. Security & Privacy Configuration (InfoSec)
-  ==========================================
--->
-<!-- 
-  Content Security Policy (CSP):
-  - Limits script/style/font/image sources to trusted domains only.
-  - Prevents XSS and malicious data injection.
-  - 'unsafe-inline' is retained for the internal script/style blocks required by this single-file architecture.
+  Security Configuration
+  - CSP: Restricts resource sources to 'self' and trusted CDNs.
+  - HSTS/Nosniff/Referrer: Standard hardening headers.
 -->
 <meta http-equiv="Content-Security-Policy" content="
   default-src 'self'; 
@@ -24,122 +18,111 @@
   frame-src https://www.youtube-nocookie.com;
   connect-src 'self';
 ">
-
-<!-- Prevent MIME type sniffing security risk -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-
-<!-- Referrer Policy: Protect user path information when clicking external links -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
-<!-- 
-  ==========================================
-  2. SEO & Metadata Configuration
-  ==========================================
--->
+<!-- Metadata & SEO -->
 <meta name="description" content="東吳大學招生專區提供最新入學資訊，涵蓋學士班、碩博士班及境外招生等多元管道。">
 <meta property="og:title" content="東吳大學招生專區">
 <meta property="og:description" content="東吳大學招生專區：學士班、碩博士班及境外招生一站式資訊入口。">
 <meta property="og:image" content="https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg">
-
-<!-- Favicon -->
 <link rel="icon" href="https://www.scu.edu.tw/entrance/anounce/Introscu/SCULOGO.png" type="image/png">
 <link rel="shortcut icon" href="https://www.scu.edu.tw/entrance/anounce/Introscu/SCULOGO.png" type="image/png">
 
-<!-- 
-  ==========================================
-  3. External Resources
-  ==========================================
--->
-<!-- FontAwesome for Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Google Fonts: Noto Sans JP/TC for Japanese Aesthetic -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@500&display=swap" rel="stylesheet">
+<!-- Third-party Resources -->
+<link rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+      xintegrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+      crossorigin="anonymous" 
+      referrerpolicy="no-referrer" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+JP:wght@500&display=swap" rel="stylesheet">
 
 <title>東吳大學招生專區</title>
 
 <!-- 
-  ==========================================
-  4. Global Configuration (Business Logic)
-  ==========================================
+  =============================================================================
+  網站後台設定區 (Site Configuration)
+  請在此處修改圖片網址與各管道的招生狀態
+  =============================================================================
 -->
 <script>
-  'use strict';
-
-  /**
-   * Banner Image Configuration
-   * @constant {string} CONFIG_BANNER_IMG - URL for the header background.
-   */
-  const CONFIG_BANNER_IMG = 'https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg';
-  
-  /** * Banner Position Configuration
-   * @constant {string} CONFIG_BANNER_POS - CSS background-position value.
-   */
-  const CONFIG_BANNER_POS = 'bottom'; 
-
-  /**
-   * Admission Status Configuration Map
-   * Maps the specific admission channel ID (matched with data-id in HTML) to its status.
-   * - 'Y': Active (Displays "Recruiting" tag)
-   * - 'N': Inactive (Hides tag)
-   * @constant {Object.<string, string>}
-   */
-  const CONFIG_ADMISSION_STATUS = {
-    // === Bachelor Degree ===
-    "bachelor_special": 'Y',    // 大學特殊選才
-    "bachelor_winter": 'Y',     // 寒假轉學考試
-    "bachelor_summer": 'N',     // 暑假轉學考試
-    "bachelor_apply": 'N',      // 大學申請入學
-    "bachelor_star": 'N',       // 大學繁星推薦
-    "bachelor_tech": 'N',       // 四技二專入學
-    "bachelor_sport": 'N',      // 運動績優單獨招生
+  window.SCU_CONFIG = {
     
-    // === Master & PhD Degrees ===
-    "master_exam": 'Y',         // 碩士班考試
-    "master_pro": 'Y',          // 碩士在職專班
-    "master_recommend": 'N',    // 碩士班甄試
-    "phd": 'N',                 // 博士班
+    // --- 1. 頁首橫幅圖片設定 (Header Banner) ---
     
-    // === International Students ===
-    "intl_student": 'Y',        // 外國學生申請入學
-    "intl_new_special": 'N',    // 新型專班
-    "intl_overseas": 'N'        // 僑生暨港澳生
+    /** * 橫幅圖片網址 
+     * 請填入完整的圖片 URL (建議使用 HTTPS)
+     */
+    BANNER_IMG: 'https://www.scu.edu.tw/entrance/anounce/Introscu/adbgu.jpg',
+    
+    /** * 背景圖片對齊位置 
+     * 可選值: 'top' (靠上), 'center' (居中), 'bottom' (靠下)
+     */
+    BANNER_POS: 'bottom',
+    
+    // --- 2. 招生狀態開關 (Admission Status) ---
+    
+    /**
+     * 控制各招生管道是否顯示紅色的「招生中」標籤
+     * 請修改下方的 'Y' 或 'N'：
+     * - 'Y': 顯示標籤 (Yes / Active)
+     * - 'N': 隱藏標籤 (No / Inactive)
+     */
+    ADMISSION_STATUS: {
+      // === 學士班 (Bachelor) ===
+      "bachelor_special": 'Y',    // 大學特殊選才
+      "bachelor_winter": 'Y',     // 寒假轉學考試
+      "bachelor_summer": 'N',     // 暑假轉學考試
+      "bachelor_apply": 'N',      // 大學申請入學
+      "bachelor_star": 'N',       // 大學繁星推薦
+      "bachelor_tech": 'N',       // 四技二專入學
+      "bachelor_sport": 'N',      // 運動績優單獨招生
+      
+      // === 碩博士班 (Master & PhD) ===
+      "master_exam": 'Y',         // 碩士班考試
+      "master_pro": 'Y',          // 碩士在職專班
+      "master_recommend": 'N',    // 碩士班甄試
+      "phd": 'N',                 // 博士班
+      
+      // === 境外招生 (International) ===
+      "intl_student": 'Y',        // 外國學生申請入學
+      "intl_new_special": 'N',    // 新型專班
+      "intl_overseas": 'N'        // 僑生暨港澳生
+    }
   };
 </script>
 
 <style>
-  /* ==========================================
-     5. CSS Stylesheet - Japanese Corporate Style
-     Theme: Trust, Order, Cleanliness
-     ========================================== */
-  
+  /* * Theme: Japanese Corporate Style
+   * Variables & Reset
+   */
   :root {
-    /* --- Color Palette --- */
-    --jp-navy: #0F2350;       /* Katsu-iro: Victory Blue (Trustworthy) */
-    --jp-red: #B00020;        /* Akane: Deep Red (Accent/Seal) */
-    --jp-text-main: #333333;  /* Charcoal (Primary Text) */
-    --jp-text-sub: #666666;   /* Gray (Secondary Text) */
-    --jp-bg-body: #f4f5f7;    /* Cool Light Gray (Background) */
-    --jp-bg-white: #ffffff;   /* Pure White (Component Background) */
-    --jp-border: #e6e6e6;     /* Subtle Border */
+    /* Palette */
+    --color-primary: #0F2350;    /* Navy Blue */
+    --color-accent: #B00020;     /* Deep Red */
+    --color-text-main: #333333;
+    --color-text-sub: #666666;
+    --color-bg-body: #f4f5f7;
+    --color-bg-card: #ffffff;
+    --color-border: #e6e6e6;
     
-    /* --- Layout & Spacing --- */
+    /* Layout */
     --navbar-height: 70px;
-    --border-radius-sm: 2px;  /* Sharp/Minimal radius for professional look */
+    --radius-sm: 2px;
     
-    /* --- Typography --- */
+    /* Typography */
     --font-main: "Noto Sans JP", "Noto Sans TC", sans-serif;
     --font-serif: "Noto Serif JP", serif;
   }
 
-  /* --- Reset & Base --- */
   * { box-sizing: border-box; }
   
   body, html { 
     margin: 0; 
     padding: 0; 
     font-family: var(--font-main);
-    background-color: var(--jp-bg-body); 
-    color: var(--jp-text-main);
+    background-color: var(--color-bg-body); 
+    color: var(--color-text-main);
     display: flex; 
     flex-direction: column; 
     min-height: 100vh;
@@ -147,13 +130,13 @@
     letter-spacing: 0.04em;
   }
 
-  /* --- Navigation Bar --- */
+  /* Navigation */
   .navbar {
     position: sticky;
     top: 0;
     width: 100%;
     height: var(--navbar-height);
-    background-color: var(--jp-bg-white);
+    background-color: var(--color-bg-card);
     border-bottom: 1px solid rgba(0,0,0,0.06); 
     z-index: 1000;
     display: flex;
@@ -167,13 +150,13 @@
     align-items: center;
     font-size: 20px;
     font-weight: 700;
-    color: var(--jp-navy);
+    color: var(--color-primary);
     text-decoration: none;
     letter-spacing: 0.1em;
   }
   
   .nav-brand i {
-    color: var(--jp-navy);
+    color: var(--color-primary);
     margin-right: 12px;
     font-size: 22px;
   }
@@ -188,7 +171,7 @@
 
   .nav-link {
     text-decoration: none;
-    color: var(--jp-text-main);
+    color: var(--color-text-main);
     font-weight: 500;
     font-size: 14px;
     transition: all 0.3s;
@@ -198,22 +181,22 @@
   }
 
   .nav-link:hover { 
-    color: var(--jp-navy);
-    border-bottom-color: var(--jp-red); 
+    color: var(--color-primary);
+    border-bottom-color: var(--color-accent); 
   }
 
   .hamburger {
     display: none;
     cursor: pointer;
     font-size: 20px;
-    color: var(--jp-navy);
+    color: var(--color-primary);
   }
 
-  /* --- Header Banner --- */
+  /* Header Banner */
   .page-header {
     width: 100%; 
     height: 320px;
-    background-color: #333; /* Fallback color */
+    background-color: #333;
     background-size: cover; 
     display: flex; 
     align-items: center; 
@@ -223,12 +206,11 @@
     position: relative;
   }
   
-  /* Overlay for text readability */
   .page-header::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(15, 35, 80, 0.6); /* Navy tint */
+    background: rgba(15, 35, 80, 0.6);
   }
 
   .header-content {
@@ -239,7 +221,7 @@
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255,255,255,0.2);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--radius-sm);
   }
 
   .header-title { 
@@ -258,7 +240,7 @@
     text-transform: uppercase;
   }
 
-  /* --- Main Container --- */
+  /* Main Layout */
   .main-container {
     max-width: 1100px;
     margin: 0 auto; 
@@ -271,14 +253,14 @@
     width: 100%;
   }
 
-  /* --- Video Section --- */
+  /* Components: Video */
   .video-section { flex: 3; min-width: 300px; }
   .video-wrapper {
     position: relative; 
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    padding-bottom: 56.25%;
     height: 0; 
     background: #000; 
-    border-radius: var(--border-radius-sm); 
+    border-radius: var(--radius-sm); 
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.06); 
   }
@@ -287,23 +269,22 @@
   .video-caption { 
     margin-top: 25px; 
     padding-left: 15px;
-    border-left: 2px solid var(--jp-red);
-    color: var(--jp-text-sub); 
+    border-left: 2px solid var(--color-accent);
+    color: var(--color-text-sub); 
     font-size: 14px; 
     line-height: 1.8;
   }
 
-  /* --- Menu Section --- */
+  /* Components: Menu */
   .menu-section {
     flex: 2; 
     min-width: 300px; 
-    background: var(--jp-bg-white); 
+    background: var(--color-bg-card); 
     padding: 40px;
-    border-radius: var(--border-radius-sm); 
-    border: 1px solid var(--jp-border);
+    border-radius: var(--radius-sm); 
+    border: 1px solid var(--color-border);
   }
 
-  /* Toggle Buttons */
   .toggle-wrapper { 
     display: flex; 
     justify-content: flex-start; 
@@ -311,19 +292,19 @@
     margin-bottom: 35px; 
     gap: 10px;
     padding-bottom: 20px;
-    border-bottom: 1px solid var(--jp-border);
+    border-bottom: 1px solid var(--color-border);
   }
-  /* Updated: Removed onchange attribute from HTML */
+  
   input[name="view-mode"] { display: none; }
     
   .toggle-btn {
     padding: 8px 24px; 
-    border: 1px solid var(--jp-navy); 
-    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--color-primary); 
+    border-radius: var(--radius-sm);
     cursor: pointer; 
     font-size: 13px; 
     font-weight: 500; 
-    color: var(--jp-navy);
+    color: var(--color-primary);
     transition: all 0.2s ease; 
     display: flex; 
     align-items: center; 
@@ -333,25 +314,25 @@
   }
   .toggle-btn:hover { background-color: rgba(15, 35, 80, 0.03); }
 
-  /* Toggle Active States */
+  /* State: Active Toggle */
   input#mode-all:checked ~ .menu-section .toggle-wrapper label[for="mode-all"],
   input#mode-recruiting:checked ~ .menu-section .toggle-wrapper label[for="mode-recruiting"] {
-    background-color: var(--jp-navy); 
+    background-color: var(--color-primary); 
     color: #fff;
   }
   input#mode-recruiting:checked ~ .menu-section .toggle-wrapper label[for="mode-recruiting"] {
-    background-color: var(--jp-red); 
-    border-color: var(--jp-red);
+    background-color: var(--color-accent); 
+    border-color: var(--color-accent);
   }
 
-  /* Menu List Layout */
+  /* Menu List */
   .category-group { margin-bottom: 50px; }
   .category-group:last-child { margin-bottom: 10px; }
 
   h3.menu-title { 
     font-size: 15px; 
-    color: var(--jp-navy); 
-    border-bottom: 2px solid var(--jp-navy); 
+    color: var(--color-primary); 
+    border-bottom: 2px solid var(--color-primary); 
     padding-bottom: 8px;
     margin: 0 0 20px 0; 
     font-weight: 700; 
@@ -365,7 +346,7 @@
 
   a.menu-link {
     text-decoration: none; 
-    color: var(--jp-text-main); 
+    color: var(--color-text-main); 
     font-size: 15px; 
     font-weight: 400;
     display: flex; 
@@ -373,29 +354,29 @@
     padding: 16px 10px; 
     line-height: 1.4; 
     justify-content: space-between;
-    border-bottom: 1px solid var(--jp-border);
+    border-bottom: 1px solid var(--color-border);
     transition: all 0.2s ease;
   }
   
   a.menu-link:hover { 
-    color: var(--jp-navy); 
+    color: var(--color-primary); 
     background-color: rgba(15, 35, 80, 0.02); 
-    padding-left: 18px; 
-    border-bottom-color: var(--jp-navy);
+    padding-left: 18px;
+    border-bottom-color: var(--color-primary);
   }
   
   .link-content { display: flex; align-items: center; }
   .arrow-icon { color: #ccc; font-size: 10px; opacity: 0.7; }
-  a.menu-link:hover .arrow-icon { color: var(--jp-navy); opacity: 1; }
+  a.menu-link:hover .arrow-icon { color: var(--color-primary); opacity: 1; }
 
-  /* Recruiting Tag (Hanko Style) */
+  /* State: Recruiting Tag */
   .tag-hot {
     background-color: #fff;
-    color: var(--jp-red); 
-    border: 1px solid var(--jp-red);
+    color: var(--color-accent); 
+    border: 1px solid var(--color-accent);
     font-size: 11px;
     padding: 2px 8px; 
-    border-radius: var(--border-radius-sm); 
+    border-radius: var(--radius-sm); 
     margin-left: 12px;
     white-space: nowrap; 
     display: none; 
@@ -403,7 +384,6 @@
     letter-spacing: 0.05em;
     animation: fadeIn 0.5s;
   }
-  /* Show tag only when parent li has 'status-active' */
   li.status-active .tag-hot { display: inline-block; }
   li.status-active a.menu-link { font-weight: 500; }
 
@@ -411,10 +391,10 @@
     from { opacity: 0; } to { opacity: 1; }
   }
 
-  /* --- Footer --- */
+  /* Footer */
   .page-footer {
     width: 100%; 
-    background-color: var(--jp-navy); 
+    background-color: var(--color-primary); 
     color: rgba(255,255,255,0.7);
     padding: 60px 20px; 
     margin-top: 100px; 
@@ -434,7 +414,6 @@
   .footer-link { color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s; border-bottom: 1px solid rgba(255,255,255,0.2); }
   .footer-link:hover { color: #fff; border-bottom: 1px solid #fff; }
   
-  /* Social Icons Section */
   .footer-social {
     margin-top: 25px;
     display: flex;
@@ -451,8 +430,8 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    border-radius: 50%; /* Circle shape */
-    border: 1px solid rgba(255,255,255,0.15); /* Subtle ring */
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
   }
   .social-link:hover {
     color: #fff;
@@ -460,14 +439,7 @@
     background-color: rgba(255,255,255,0.1);
     transform: translateY(-2px);
   }
-  
-  /* Fix: Reset margin for icons inside social links to ensure perfect centering.
-     Overrides the generic ".footer-info i" rule which added right margin.
-  */
-  .social-link i {
-    margin: 0; 
-    line-height: 1;
-  }
+  .social-link i { margin: 0; line-height: 1; }
 
   .copyright { 
     margin-top: 40px; 
@@ -479,10 +451,9 @@
     text-transform: uppercase;
   }
 
-  /* --- Mobile Responsive --- */
+  /* Responsive Design */
   @media (max-width: 768px) {
     .navbar { padding: 0 20px; }
-    
     .hamburger { display: block; }
     
     .nav-menu {
@@ -496,7 +467,9 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       padding: 0;
       gap: 0;
-      border-bottom: 1px solid var(--jp-border);
+      border-bottom: 1px solid var(--color-border);
+      max-height: calc(100vh - var(--navbar-height));
+      overflow-y: auto;
     }
     
     .nav-menu.active { display: flex; }
@@ -504,10 +477,10 @@
     .nav-link {
       display: block;
       padding: 18px 25px;
-      border-bottom: 1px solid var(--jp-border);
-      color: var(--jp-text-main);
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text-main);
     }
-    .nav-link:hover { border-bottom-color: var(--jp-border); background-color: #fafafa; }
+    .nav-link:hover { border-bottom-color: var(--color-border); background-color: #fafafa; }
 
     .page-header { height: 220px; margin-bottom: 40px; }
     .header-content { padding: 30px; width: 90%; }
@@ -516,9 +489,7 @@
     
     .main-container { flex-direction: column; gap: 40px; }
     .video-section, .menu-section { width: 100%; }
-    
     .menu-section { padding: 25px 20px; }
-    
     .toggle-wrapper { justify-content: space-between; }
     .toggle-btn { flex: 1; justify-content: center; }
   }
@@ -526,12 +497,11 @@
 </head>
 <body>
 
-  <!-- 1. Navigation -->
+  <!-- Navbar -->
   <nav class="navbar">
     <a href="#" class="nav-brand">
       <i class="fa-solid fa-graduation-cap"></i> 東吳大學招生專區
     </a>
-    <!-- Updated: Removed inline onclick handler -->
     <div class="hamburger" id="hamburgerBtn">
       <i class="fa-solid fa-bars"></i>
     </div>
@@ -544,7 +514,7 @@
     </ul>
   </nav>
 
-  <!-- 2. Header Banner -->
+  <!-- Header Banner -->
   <header class="page-header" id="main-header">
     <div class="header-content">
       <div class="header-title">東吳大學招生專區</div>
@@ -552,15 +522,14 @@
     </div>
   </header>
 
-  <!-- State Control (Hidden Inputs) -->
-  <!-- Updated: Removed inline onchange handlers. Added class for selection. -->
+  <!-- View Controls -->
   <input type="radio" name="view-mode" id="mode-recruiting" class="view-toggle" checked>
   <input type="radio" name="view-mode" id="mode-all" class="view-toggle">
 
-  <!-- 3. Main Content -->
+  <!-- Main Content -->
   <div class="main-container">
     
-    <!-- Left Column: Video -->
+    <!-- Video Section -->
     <div class="video-section">
       <div class="video-wrapper">
         <iframe 
@@ -575,14 +544,13 @@
         </iframe>
       </div>
       <div class="video-caption">
-        <strong><i class="fa-brands fa-youtube" style="color:var(--jp-red);"></i> 東吳大學簡介影片「過去‧現在‧未來」篇</strong><br>
+        <strong><i class="fa-brands fa-youtube" style="color:var(--color-accent);"></i> 東吳大學簡介影片「過去‧現在‧未來」篇</strong><br>
         點擊觀看東吳大學的校園環境與教學特色介紹，探索您的未來可能。
       </div>
     </div>
 
-    <!-- Right Column: Admission List -->
+    <!-- Admission List Section -->
     <div class="menu-section">
-      <!-- Filter Controls -->
       <div class="toggle-wrapper">
         <label class="toggle-btn" for="mode-recruiting">
           <i class="fa-solid fa-fire"></i> 顯示招生中
@@ -592,11 +560,7 @@
         </label>
       </div>
 
-      <!-- 
-        NOTE: Content utilizes 'data-id' attributes for robust logic binding.
-      -->
-
-      <!-- Category: Bachelor -->
+      <!-- Bachelor -->
       <div class="category-group">
         <h3 class="menu-title">學士班</h3>
         <ul class="menu-list">
@@ -610,7 +574,7 @@
         </ul>
       </div>
 
-      <!-- Category: Master & PhD -->
+      <!-- Master & PhD -->
       <div class="category-group">
         <h3 class="menu-title">碩博士班</h3>
         <ul class="menu-list">
@@ -621,7 +585,7 @@
         </ul>
       </div>
 
-      <!-- Category: International -->
+      <!-- International -->
       <div class="category-group">
         <h3 class="menu-title">境外招生</h3>
         <ul class="menu-list">
@@ -634,14 +598,13 @@
     </div>
   </div>
 
-  <!-- 4. Footer -->
+  <!-- Footer -->
   <footer class="page-footer">
     <div class="footer-title">東吳大學教務處招生組</div>
     <div class="footer-info">
       <p><i class="fa-solid fa-phone"></i> (02)2881-9471 #6062~6070、#5961~5963</p>
       <p><i class="fa-solid fa-envelope"></i> <a href="mailto:entrance@scu.edu.tw" class="footer-link">entrance@scu.edu.tw</a></p>
       
-      <!-- Social Media Links -->
       <div class="footer-social">
         <a href="https://www.facebook.com/KNOWINGSCU" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
           <i class="fa-brands fa-facebook-f"></i>
@@ -653,117 +616,116 @@
           <i class="fa-brands fa-youtube"></i>
         </a>
       </div>
-
     </div>
     <div class="copyright">
       &copy; Soochow University. All Rights Reserved.
     </div>
   </footer>
 
-  <!-- 
-    ==========================================
-    5. Client-Side Application Logic
-    ==========================================
-  -->
+  <!-- Application Logic -->
   <script>
-    /**
-     * Initializes the page when the DOM is fully loaded.
-     * Sets up the banner background, registers event listeners, and applies initial filters.
-     */
-    function initPage() {
-      // 1. Initialize Header Background
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // Load Configuration
+      const CONFIG = window.SCU_CONFIG || {};
+      
+      // DOM Elements
       const header = document.getElementById('main-header');
-      if (CONFIG_BANNER_IMG) {
-        // Overlay gradient for better text readability
-        header.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${CONFIG_BANNER_IMG}')`;
-        header.style.backgroundPosition = CONFIG_BANNER_POS;
+      const hamburger = document.getElementById('hamburgerBtn');
+      const navMenu = document.getElementById('navMenu');
+      const viewToggles = document.querySelectorAll('.view-toggle');
+      const items = document.querySelectorAll('.menu-item');
+      const groups = document.querySelectorAll('.category-group');
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      /**
+       * Initialize header background.
+       */
+      function initHeader() {
+        if (header && CONFIG.BANNER_IMG) {
+          header.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${CONFIG.BANNER_IMG}')`;
+          header.style.backgroundPosition = CONFIG.BANNER_POS || 'center';
+        }
       }
 
-      // 2. Register Event Listeners (Security Best Practice: No inline events)
-      
-      // Mobile Hamburger Menu
-      const hamburger = document.getElementById('hamburgerBtn');
+      /**
+       * Apply 'status-active' class based on configuration.
+       */
+      function applyStatus() {
+        const statusMap = CONFIG.ADMISSION_STATUS || {};
+        items.forEach(item => {
+          const id = item.getAttribute('data-id');
+          if (id && statusMap[id] === 'Y') {
+            item.classList.add('status-active');
+          } else {
+            item.classList.remove('status-active');
+          }
+        });
+      }
+
+      /**
+       * Filter menu items based on selected view mode.
+       */
+      function filterContent() {
+        const recruitingToggle = document.getElementById('mode-recruiting');
+        const isRecruitingMode = recruitingToggle && recruitingToggle.checked;
+
+        items.forEach(item => {
+          if (isRecruitingMode) {
+            item.style.display = item.classList.contains('status-active') ? 'block' : 'none';
+          } else {
+            item.style.display = 'block';
+          }
+        });
+
+        groups.forEach(group => {
+          const groupItems = group.querySelectorAll('.menu-item');
+          let hasVisible = false;
+          groupItems.forEach(item => {
+            if (item.style.display !== 'none') hasVisible = true;
+          });
+          group.style.display = hasVisible ? 'block' : 'none';
+        });
+      }
+
+      /**
+       * Toggle mobile navigation menu.
+       */
+      function toggleMenu() {
+        if (navMenu) {
+          navMenu.classList.toggle('active');
+        }
+      }
+
+      /**
+       * Close mobile menu.
+       */
+      function closeMenu() {
+        if (navMenu && navMenu.classList.contains('active')) {
+          navMenu.classList.remove('active');
+        }
+      }
+
+      // Initialize
+      initHeader();
+      applyStatus();
+      filterContent();
+
+      // Event Listeners
       if (hamburger) {
         hamburger.addEventListener('click', toggleMenu);
       }
 
-      // Filter Radio Buttons
-      const viewToggles = document.querySelectorAll('.view-toggle');
       viewToggles.forEach(toggle => {
         toggle.addEventListener('change', filterContent);
       });
 
-      // 3. Initialize Admission Status & Filters
-      applyStatusConfig();
-      filterContent();
-    }
-
-    /**
-     * Applies the admission status configuration to the DOM elements.
-     * Iterates through menu items and adds 'status-active' class based on 'data-id'.
-     * This logic is decoupled from the display text for better maintainability.
-     */
-    function applyStatusConfig() {
-      const items = document.querySelectorAll('.menu-item');
-      items.forEach(item => {
-        const id = item.getAttribute('data-id');
-        
-        // If the ID exists in config and is set to 'Y', activate the status
-        if (id && CONFIG_ADMISSION_STATUS[id] === 'Y') {
-          item.classList.add('status-active');
-        } else {
-          item.classList.remove('status-active');
-        }
+      navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
       });
-    }
-
-    /**
-     * Filters content based on the selected view mode (Recruiting vs All).
-     * Toggles visibility of menu items and hides empty category groups.
-     */
-    function filterContent() {
-      // Logic: If 'mode-recruiting' is checked, we filter; otherwise show all
-      const isRecruitingMode = document.getElementById('mode-recruiting').checked;
-      const allItems = document.querySelectorAll('.menu-item');
-      const allGroups = document.querySelectorAll('.category-group');
-
-      // Filter individual items
-      allItems.forEach(item => {
-        if (isRecruitingMode) {
-          // Show only items with 'status-active' class in recruiting mode
-          item.style.display = item.classList.contains('status-active') ? 'block' : 'none';
-        } else {
-          // Show all items in 'All' mode
-          item.style.display = 'block';
-        }
-      });
-
-      // Hide empty groups if all items within are hidden
-      allGroups.forEach(group => {
-        const itemsInGroup = group.querySelectorAll('.menu-item');
-        let hasVisible = false;
-        // Check if any visible items exist in this group
-        itemsInGroup.forEach(item => { 
-          if(item.style.display !== 'none') hasVisible = true; 
-        });
-        group.style.display = hasVisible ? 'block' : 'none';
-      });
-    }
-
-    /**
-     * Toggles the mobile navigation menu.
-     * Handles the opening/closing of the navbar menu on mobile devices.
-     */
-    function toggleMenu() {
-      const navMenu = document.getElementById('navMenu');
-      if (navMenu) {
-        navMenu.classList.toggle('active');
-      }
-    }
-
-    // Execute Initialization on Load
-    // Uses 'DOMContentLoaded' to ensure HTML is parsed before scripts run
-    window.addEventListener('DOMContentLoaded', initPage);
+    });
   </script>
 </body>
 </html>
